@@ -2,7 +2,7 @@
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "React App.js file example"
+    "query": "React App.js"
   }
 }
 ```
