@@ -1,6 +1,8 @@
+```json
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "Jest App.test.js example for Node.js"
+    "query": "Example package.json for React, Express, and Jest"
   }
 }
+```
