@@ -1,265 +1,149 @@
 ```markdown
-# Cryptocurrency Price Tracker
+# Cryptocurrency Price Tracker - Bitcoin and Ethereum Prices Dashboard
 
-A tool that fetches the current live prices of Bitcoin and Ethereum and displays them in a dark-mode dashboard. This project aims to provide users with real-time cryptocurrency prices with a user-friendly, modern interface.
+## Overview
+This application is a cryptocurrency price tracker that fetches and displays the latest prices of Bitcoin (BTC) and Ethereum (ETH) in a dark-mode dashboard. The dashboard updates in real-time, providing users with an easy-to-navigate interface to monitor the current market rates.
 
-## System Requirements
+## Features
+- **Fetch Current Prices**: Retrieves the latest prices of Bitcoin and Ethereum from a reliable cryptocurrency API.
+- **Real-Time Updates**: Dashboard auto-refreshes every minute to reflect the current market rates.
+- **User-Friendly Interface**: Clean, simple design with minimal clutter.
+- **Error Handling**: Displays informative error messages if API fails.
 
-### Backend
-- **Language**: Python (using Flask or Django)
-- **API**: CoinGecko API or CoinMarketCap API for fetching cryptocurrency data
-- **Database**: SQLite for storing temporary data
-- **Deployment**: AWS, Heroku, or any cloud service
+## Requirements
 
-### Frontend
-- **Framework**: React or Angular
-- **UI/UX Design**: Material-UI, Bootstrap
-- **Deployment**: Vercel, Netlify, or any cloud service
+### Functional Requirements
+1. **Data Fetching**
+    - Fetch latest prices for Bitcoin and Ethereum using a cryptocurrency API.
+    - Include current price, price change percentage, and last updated timestamp.
 
-### Libraries and Tools
-- Axios (for API calls)
-- React-Router (for routing)
-- Chart.js (for data visualization)
-- Moment.js (for handling time-related tasks)
+2. **Dashboard Layout**
+    - Dark-mode dashboard with current price, price change percentage, and last updated timestamp for each cryptocurrency.
+    - Header titled "Cryptocurrency Price Tracker".
 
-## Feature Outline
+3. **Real-Time Updates**
+    - Auto-refresh data every minute.
 
-### Dashboard
-- Dark mode enabled
-- Real-time Bitcoin and Ethereum price displays
-- 24-hour price change percentage
-- Price history charts (line graphs)
+4. **Error Handling**
+    - Display error message "Unable to Fetch Prices. Please try again later." if API call fails.
 
-### Settings
-- Toggle for dark mode
-- Ability to choose between Bitcoin and Ethereum
+### Non-Functional Requirements
+1. **Performance**
+    - Dashboard loads within 5 seconds.
+    - Smooth data refresh, no flickering.
 
-### Additional Features
-- Notifications for price alerts
-- News updates from leading crypto news sources
+2. **Scalability**
+    - Handles increased traffic without performance degradation.
 
-## Architecture Diagram
-```
-[Frontend (React/Angular)] <-> [API Gateway] <-> [Backend (Flask/Django)]
-                                                  |
-                                                  v
-                                            [Database (SQLite)]
-```
+3. **Accessibility**
+    - Meets WCAG 2.1 AA standards.
 
-## Backend Setup
+4. **Security**
+    - No sensitive data stored.
+    - API requests are made over HTTPS.
 
-### Python Backend (Flask/Django Example)
+## UI Design
 
-#### Project Structure
-```
-/crypto_tracker
-    /app
-        /models.py
-        /views.py
-        /routes.py
-        __init__.py
-    /database.db
-    /requirements.txt
-    app.py
-```
+### Dashboard Design
+- **Color Scheme:**
+    - Background Color: #121212 (dark grey)
+    - Text Color: #FFFFFF (white)
+    - Price Change Background Colors:
+        - Positive Change: #04A94A (green)
+        - Negative Change: #D94D37 (red)
+    - Header Background Color: #000000 (black)
 
-#### Step-by-Step Implementation
+- **Layout Elements:**
+    - Header:
+        - Title: "Cryptocurrency Price Tracker"
+    - Dashboard Grid:
+        - Two columns: one for Bitcoin and one for Ethereum.
+        - Includes title, current price, price change percentage, and last updated timestamp.
+    - Responsive Design.
 
-1. **Install Flask/Django:**
-   ```bash
-   pip install flask
-   # or
-   pip install django
-   ```
+- **Typography:**
+    - Font: Roboto (or similar sans-serif font)
+    - Font Sizes:
+        - Title: 24px
+        - Current Price: 18px
+        - Price Change Percentage: 16px
+        - Last Updated Timestamp: 14px
 
-2. **Setup Flask/Django Project:**
-   ```bash
-   flask --app app.py create myproject
-   # or
-   django-admin startproject crypto_tracker .
-   ```
+## Implementation Details
 
-3. **Create Models (if using Django):**
-   ```python
-   # models.py
-   from django.db import models
+### API Integration
+- **API Used:** CoinGecko API
+- **API Endpoint:** [Insert API Endpoint URL]
+- **API Request Parameters:**
+    - `ids`: "bitcoin,ethereum"
+    - `vs_currencies`: "usd"
+    - `market_data`: "true"
 
-   class PriceData(models.Model):
-       cryptocurrency = models.CharField(max_length=100)
-       price = models.DecimalField(max_digits=30, decimal_places=2)
-       timestamp = models.DateTimeField()
-   ```
+### User Interface Implementation
+- **HTML Structure:**
+    - Header for title.
+    - Two main content divs for Bitcoin and Ethereum.
 
-4. **Create Views/Controllers:**
-   ```python
-   # views.py
-   from flask import Flask, jsonify, render_template
-   import requests
+- **CSS Styling:**
+    - Define styles for each element as outlined in UI design.
 
-   app = Flask(__name__)
+- **JavaScript Functionality:**
+    - API call to fetch cryptocurrency prices.
+    - DOM manipulation to update dashboard.
+    - Real-time updates using setInterval.
+    - Error handling to display error messages.
 
-   @app.route('/')
-   def index():
-       return render_template('dashboard.html')
+## Testing Requirements
 
-   @app.route('/api/prices')
-   def get_prices():
-       url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd'
-       response = requests.get(url)
-       data = response.json()
-       return jsonify(data)
-   ```
+### Test Cases
 
-5. **Create Routes:**
-   ```python
-   # app.py (for Flask)
-   from app.routes import *
-   if __name__ == '__main__':
-       app.run()
-   ```
+#### Positive Test Cases
+- Verify API call and successful data display.
+- Verify auto-refresh every minute.
+- Verify correct price change color.
 
-6. **Integrate API Gateway:**
-   Configure an API gateway to route requests between the frontend and backend.
+#### Negative Test Cases
+- Verify error message display on API failure.
+- Verify graceful handling of empty or unexpected data.
 
-7. **Database Connectivity:**
-   Configure database connection (SQLite) to store temporary data.
+#### Accessibility Test Cases
+- Verify accessibility for users with disabilities.
+- Verify color contrast.
 
-## Frontend Setup
+#### Performance Test Cases
+- Verify dashboard load time.
+- Verify smooth data refresh.
 
-### Frontend (React/Angular Example)
+## Deployment Plan
 
-#### Project Structure
-```
-/frontend
-    /public
-    /src
-        /components
-            /Dashboard.js
-            /Settings.js
-            /PriceHistory.js
-            /App.css
-        /App.js
-    package.json
-    .env
-```
+### Development Environment
+- Developed with HTML, CSS, JavaScript, Node.js, and React.
 
-#### Step-by-Step Implementation
+### Deployment Environment
+- Deployed on AWS, Heroku, or Vercel.
 
-1. **Initialize the Frontend Project:**
-   ```bash
-   npx create-react-app frontend
-   # or
-   ng new frontend
-   ```
-
-2. **Install Dependencies:**
-   ```bash
-   npm install axios react-router-dom material-ui
-   # or
-   ng add @angular/material
-   ```
-
-3. **Create Components and Pages:**
-   ```jsx
-   // src/components/Dashboard.js
-   import React, { useState, useEffect } from 'react';
-   import axios from 'axios';
-
-   function Dashboard() {
-       const [prices, setPrices] = useState({ bitcoin: 0, ethereum: 0 });
-
-       useEffect(() => {
-           fetchPrices();
-       }, []);
-
-       const fetchPrices = async () => {
-           const response = await axios.get('/api/prices');
-           setPrices(response.data);
-       };
-
-       return (
-           <div style={{ backgroundColor: '#333', color: '#fff' }}>
-               <h1>Cryptocurrency Prices</h1>
-               <p>Bitcoin: ${prices.bitcoin}</p>
-               <p>Ethereum: ${prices.ethereum}</p>
-           </div>
-       );
-   }
-
-   export default Dashboard;
-   ```
-
-4. **Setup Routing:**
-   ```jsx
-   // src/App.js
-   import React from 'react';
-   import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-   import Dashboard from './components/Dashboard';
-   import Settings from './components/Settings';
-
-   function App() {
-       return (
-           <Router>
-               <Routes>
-                   <Route path="/" element={<Dashboard />} />
-                   <Route path="/settings" element={<Settings />} />
-               </Routes>
-           </Router>
-       );
-   }
-
-   export default App;
-   ```
-
-5. **Serve the Frontend:**
-   ```bash
-   npm start
-   # or
-   ng serve
-   ```
-
-#### Environment Variables
-- `.env` file for frontend configuration.
-- `REACT_APP_BACKEND_URL=http://localhost:5000`
-
-## Deployment Steps
-
-### Backend
-- Deploy Flask/Django application using cloud services like AWS, Heroku, or Vercel (for Flask) or Vercel (for Django).
-
-### Frontend
-- Deploy React/Angular application using cloud services like Netlify, Vercel, or Vercel (for React) or Firebase (for Angular).
-
-## Testing
-
-### Unit Tests
-- Use Jest and React Testing Library for frontend components.
-
-### Integration Tests
-- Use PyTest for backend tests, covering API endpoints.
-
-### UI Testing
-- Use Cypress or Selenium for end-to-end testing.
-
-## Security Considerations
-
-### API Key Protection
-- Ensure that API keys used for third-party services are not exposed.
-
-### CORS Configuration
-- Configure CORS on the backend to allow cross-origin requests from the frontend.
-
-### HTTPS
-- Ensure that the application is served over HTTPS.
+### Deployment Steps
+1. Develop and test locally.
+2. Deploy to staging environment.
+3. Conduct testing in staging.
+4. Deploy to production environment.
+5. Monitor for performance and errors post-deployment.
 
 ## Documentation
 
-### API Documentation
-- Document API endpoints and how to interact with the backend.
+### Developer Documentation
+- Setup, run, and test instructions.
+- API documentation.
 
 ### User Documentation
-- Provide a user guide on how to use the dashboard.
+- User guide on how to use the application.
 
-### Release Notes
-- Detail the features, bug fixes, and improvements in each release.
+## Approval
+- **Approval Date:** [Insert Date]
+- **Approved By:** [Name of Approver]
+- **Comments/Observations:** [Any comments or feedback from reviewers]
+
+---
+
+**End of Specification
 ```

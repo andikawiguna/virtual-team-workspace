@@ -1,5 +1,5 @@
 ```yaml
-name: Node.js CI
+name: Cryptocurrency Price Tracker CI/CD
 
 on:
   push:
@@ -8,12 +8,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -21,9 +17,11 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '14'
 
-    - run: npm ci
+    - name: Install dependencies
+      run: npm install
 
-    - run: npm test
+    - name: Run tests
+      run: npm test
 ```

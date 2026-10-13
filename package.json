@@ -1,6 +1,8 @@
+```json
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "Example package.json for React, Express, and Jest"
+    "query": "Best practices for writing package.json with all required dependencies for a cryptocurrency price tracker using Node.js"
   }
 }
+```

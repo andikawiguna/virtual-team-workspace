@@ -2,7 +2,7 @@
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "Example package.json for React, Express, and Jest"
+    "query": "Best practices for writing Jest tests for React components"
   }
 }
 ```
