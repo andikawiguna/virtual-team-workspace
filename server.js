@@ -2,7 +2,7 @@
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "Sample Express server.js code"
+    "query": "Express server.js file example"
   }
 }
 ```

@@ -2,7 +2,7 @@
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "Create a Jest test file for App.js"
+    "query": "Jest App.test.js file example"
   }
 }
 ```
