@@ -1,149 +1,120 @@
 ```markdown
-# Cryptocurrency Price Tracker - Bitcoin and Ethereum Prices Dashboard
+# README.md
 
-## Overview
-This application is a cryptocurrency price tracker that fetches and displays the latest prices of Bitcoin (BTC) and Ethereum (ETH) in a dark-mode dashboard. The dashboard updates in real-time, providing users with an easy-to-navigate interface to monitor the current market rates.
+## Title: **Fix for CI/CD Failure Due to Unavailable Job Logs in GitHub Actions**
 
-## Features
-- **Fetch Current Prices**: Retrieves the latest prices of Bitcoin and Ethereum from a reliable cryptocurrency API.
-- **Real-Time Updates**: Dashboard auto-refreshes every minute to reflect the current market rates.
-- **User-Friendly Interface**: Clean, simple design with minimal clutter.
-- **Error Handling**: Displays informative error messages if API fails.
+### Objective:
+To resolve the current CI/CD failure in GitHub Actions where specific job logs were unavailable, leading to an inability to diagnose and address the underlying issues effectively. The scope of this spec includes both identifying potential causes and proposing solutions to ensure smooth CI/CD operations.
 
-## Requirements
+### Description:
+A recent CI/CD pipeline execution in GitHub Actions resulted in a failure where the logs for specific jobs were non-accessible. This lack of visibility hinders the debugging process and hampers the development team's ability to resolve the underlying issues promptly. This spec aims to address the root causes of this failure by recommending comprehensive logging strategies and providing a roadmap for code modifications.
 
-### Functional Requirements
-1. **Data Fetching**
-    - Fetch latest prices for Bitcoin and Ethereum using a cryptocurrency API.
-    - Include current price, price change percentage, and last updated timestamp.
+### Assumptions:
+1. The initial log output during the CI/CD run does not provide sufficient details for troubleshooting.
+2. The GitHub Actions environment is correctly configured according to standard practices.
+3. The CI/CD pipeline processes multiple jobs, and the issue impacts one or more of these jobs.
 
-2. **Dashboard Layout**
-    - Dark-mode dashboard with current price, price change percentage, and last updated timestamp for each cryptocurrency.
-    - Header titled "Cryptocurrency Price Tracker".
+### Deliverables:
+1. A detailed error log analysis report
+2. A code fix spec document outlining the necessary modifications.
+3. A test plan to validate the fix and ensure that job logs remain accessible after the changes.
 
-3. **Real-Time Updates**
-    - Auto-refresh data every minute.
+### Methodology:
+1. **Initial Log Analysis**: Review the available logs to identify any patterns or errors that might give context to the failure.
+2. **Root Cause Identification**: Use the gathered information to determine the reasons why specific job logs are unavailable.
+3. **Implementation of Fixes**:
+    - **Enhanced Logging**: Introduce more verbose logging at key milestones within the codebase to capture additional information necessary for debugging.
+    - **Error Handling**: Augment error handling mechanisms to capture and log detailed error messages.
+    - **Configuration Review**: Examine and possibly update GitHub Actions configurations to ensure all job logs are retained and accessible.
+4. **Testing**: Develop and execute a series of tests to ensure the fixes do not introduce new issues and that all job logs are now properly available.
 
-4. **Error Handling**
-    - Display error message "Unable to Fetch Prices. Please try again later." if API call fails.
+### Detailed Spec:
 
-### Non-Functional Requirements
-1. **Performance**
-    - Dashboard loads within 5 seconds.
-    - Smooth data refresh, no flickering.
+#### 1. Enhanced Logging
+- **Modify Codebase**:
+  - **Target Files**: All relevant scripts and services responsible for executing CI/CD jobs.
+  - **Changes**:
+    ```python
+    import logging
 
-2. **Scalability**
-    - Handles increased traffic without performance degradation.
+    # Set up logging configuration
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-3. **Accessibility**
-    - Meets WCAG 2.1 AA standards.
+    def job_function():
+        logging.debug("Starting job_function")
+        try:
+            # The existing job logic
+            pass
+        except Exception as e:
+            logging.error(f"Error in job_function: {e}")
+        finally:
+            logging.debug("Completed job_function")
+    ```
+- **Rationale**: By adding debug-level logging at key points within the job execution, we can capture more detailed information about the flow and any potential issues that occur.
 
-4. **Security**
-    - No sensitive data stored.
-    - API requests are made over HTTPS.
+#### 2. Error Handling
+- **Modify Codebase**:
+  - **Target Files**: Exception handling sections in the CI/CD scripts and services.
+  - **Changes**:
+    ```python
+    def execute_job():
+        try:
+            # Execute the job logic
+            pass
+        except SpecificError as e:
+            logging.error(f"SpecificError occurred: {e}")
+        except AnotherError as e:
+            logging.error(f"AnotherError occurred: {e}")
+    ```
+- **Rationale**: Proper error handling will ensure that specific exceptions are caught and logged appropriately, providing clearer insights into what may have gone wrong.
 
-## UI Design
+#### 3. Configuration Review
+- **GitHub Actions Configuration**:
+  - **Target Files**: `.github/workflows/*.yml` files
+  - **Changes**:
+    ```yaml
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout Repository
+            uses: actions/checkout@v2
+          - name: Run Tests
+            run: |
+              # Existing test commands
+              echo "Test logs will be logged and persist"
+          # Add configuration to retain and access logs
+          - name: Persist Logs
+            uses:.actions/upload-artifact@v2
+            with:
+              name: JobLogs
+              path: ./logs
+    ```
+- **Rationale**: By configuring upload artifacts, we ensure that the logs are stored and can be accessed via GitHub Actions Artifacts.
 
-### Dashboard Design
-- **Color Scheme:**
-    - Background Color: #121212 (dark grey)
-    - Text Color: #FFFFFF (white)
-    - Price Change Background Colors:
-        - Positive Change: #04A94A (green)
-        - Negative Change: #D94D37 (red)
-    - Header Background Color: #000000 (black)
+### Test Plan
 
-- **Layout Elements:**
-    - Header:
-        - Title: "Cryptocurrency Price Tracker"
-    - Dashboard Grid:
-        - Two columns: one for Bitcoin and one for Ethereum.
-        - Includes title, current price, price change percentage, and last updated timestamp.
-    - Responsive Design.
+#### 1. Unit Tests
+- **Description**: Write unit tests to verify that the enhanced logging is capturing all the debug-level information and errors correctly.
+- **Tools**: Use Python's `unittest` framework.
 
-- **Typography:**
-    - Font: Roboto (or similar sans-serif font)
-    - Font Sizes:
-        - Title: 24px
-        - Current Price: 18px
-        - Price Change Percentage: 16px
-        - Last Updated Timestamp: 14px
+#### 2. Integration Tests
+- **Description**: Run the CI/CD pipeline again with the updated code.
+- **Steps**:
+  1. Commit the changes to the repository.
+  2. Trigger the CI/CD pipeline.
+  3. After the pipeline completes, check if all job logs are available and if they contain the expected debug and error information.
+  4. If logs are visible, validate that they have captured sufficient information for debugging.
 
-## Implementation Details
+#### 3. Production Deployment
+- **Description**: Once the tests pass successfully, deploy the changes to the production environment and monitor the CI/CD pipeline for any issues.
+- **Expected Outcome**: CI/CD pipeline executes without log retrieval issues, facilitating easy troubleshooting.
 
-### API Integration
-- **API Used:** CoinGecko API
-- **API Endpoint:** [Insert API Endpoint URL]
-- **API Request Parameters:**
-    - `ids`: "bitcoin,ethereum"
-    - `vs_currencies`: "usd"
-    - `market_data`: "true"
+### Conclusion
+Completing this spec will ensure that the CI/CD process in GitHub Actions enjoys improved logging and error handling, making the diagnostics process more efficient and effective. By addressing the root causes of the unavailable job logs, the development team can maintain a smoother workflow and promptly resolve any future issues.
 
-### User Interface Implementation
-- **HTML Structure:**
-    - Header for title.
-    - Two main content divs for Bitcoin and Ethereum.
+### Specification Status: Draft
+### Author: [Your Name]
+### Date: [Current Date]
 
-- **CSS Styling:**
-    - Define styles for each element as outlined in UI design.
-
-- **JavaScript Functionality:**
-    - API call to fetch cryptocurrency prices.
-    - DOM manipulation to update dashboard.
-    - Real-time updates using setInterval.
-    - Error handling to display error messages.
-
-## Testing Requirements
-
-### Test Cases
-
-#### Positive Test Cases
-- Verify API call and successful data display.
-- Verify auto-refresh every minute.
-- Verify correct price change color.
-
-#### Negative Test Cases
-- Verify error message display on API failure.
-- Verify graceful handling of empty or unexpected data.
-
-#### Accessibility Test Cases
-- Verify accessibility for users with disabilities.
-- Verify color contrast.
-
-#### Performance Test Cases
-- Verify dashboard load time.
-- Verify smooth data refresh.
-
-## Deployment Plan
-
-### Development Environment
-- Developed with HTML, CSS, JavaScript, Node.js, and React.
-
-### Deployment Environment
-- Deployed on AWS, Heroku, or Vercel.
-
-### Deployment Steps
-1. Develop and test locally.
-2. Deploy to staging environment.
-3. Conduct testing in staging.
-4. Deploy to production environment.
-5. Monitor for performance and errors post-deployment.
-
-## Documentation
-
-### Developer Documentation
-- Setup, run, and test instructions.
-- API documentation.
-
-### User Documentation
-- User guide on how to use the application.
-
-## Approval
-- **Approval Date:** [Insert Date]
-- **Approved By:** [Name of Approver]
-- **Comments/Observations:** [Any comments or feedback from reviewers]
-
----
-
-**End of Specification
 ```

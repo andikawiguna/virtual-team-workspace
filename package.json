@@ -1,8 +1,9 @@
-```json
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": "Best practices for writing package.json with all required dependencies for a cryptocurrency price tracker using Node.js"
+    "query": {
+      "type": "string",
+      "value": "Create a package.json with all required dependencies for an Express server"
+    }
   }
 }
-```
