@@ -1,49 +1,82 @@
-```javascript
-// App.js
-import React, { useState, useContext, createContext } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+```jsx
+// File: src/App.js
+
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-// Components
-import Home from './components/Home';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Dashboard from './components/Dashboard';
-import APIData from './components/APIData';
-
-// Context for managing user authentication state
-const AuthContext = createContext();
+import './App.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [btcPrice, setBtcPrice] = useState(null);
+  const [ethPrice, setEthPrice] = useState(null);
+  const [refreshInterval, setRefreshInterval] = useState(60000); // Default to 1 minute
 
-  // Function to handle user login
-  const login = () => {
-    setIsAuthenticated(true);
-  };
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
+          params: {
+            ids: 'bitcoin,ethereum',
+            vs_currencies: 'usd'
+          }
+        });
+        setBtcPrice(response.data.bitcoin.usd);
+        setEthPrice(response.data.ethereum.usd);
+      } catch (error) {
+        console.error('Error fetching prices:', error);
+      }
+    };
 
-  // Function to handle user logout
-  const logout = () => {
-    setIsAuthenticated(false);
+    fetchPrices();
+    const interval = setInterval(fetchPrices, refreshInterval);
+
+    return () => clearInterval(interval);
+  }, [refreshInterval]);
+
+  const handleRefresh = async () => {
+    try {
+      const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
+        params: {
+          ids: 'bitcoin,ethereum',
+          vs_currencies: 'usd'
+        }
+      });
+      setBtcPrice(response.data.bitcoin.usd);
+      setEthPrice(response.data.ethereum.usd);
+    } catch (error) {
+      console.error('Error refreshing prices:', error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login">
-            {isAuthenticated ? <Redirect to="/dashboard" /> : <Login />}
-          </Route>
-          <Route path="/signup" component={Signup} />
-          <Route path="/dashboard">
-            {isAuthenticated ? <Dashboard /> : <Redirect to="/login" />}
-          </Route>
-          <Route path="/api-data" component={APIData} />
-          <Route path="*" component={() => <div>404 Not Found</div>} />
-        </Switch>
-      </Router>
-    </AuthContext.Provider>
+    <div className="App">
+      <header className="App-header">
+        <h1>Cryptocurrency Price Tracker</h1>
+      </header>
+      <main className="App-main">
+        <div className="App-price-display">
+          <h2>Bitcoin (BTC)</h2>
+          <p>${btcPrice?.toLocaleString() || 'Loading...'}</p>
+        </div>
+        <div className="App-price-display">
+          <h2>Ethereum (ETH)</h2>
+          <p>${ethPrice?.toLocaleString() || 'Loading...'}</p>
+        </div>
+        <button className="App-refresh-button" onClick={handleRefresh}>
+          Refresh Prices
+        </button>
+        <div className="App-settings">
+          <h3>Refresh Interval</h3>
+          <select
+            value={refreshInterval}
+            onChange={(e) => setRefreshInterval(Number(e.target.value))}
+          >
+            <option value={60000}>1 minute</option>
+            <option value={300000}>5 minutes</option>
+            <option value={600000}>10 minutes</option>
+          </select>
+        </div>
+      </main>
+    </div>
   );
 }
 

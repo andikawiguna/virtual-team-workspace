@@ -1,103 +1,128 @@
 ```markdown
-# Simple React App
+# Cryptocurrency Price Tracker
 
-## Overview
+## Introduction
+The Cryptocurrency Price Tracker application is designed to fetch and display current Bitcoin (BTC) and Ethereum (ETH) prices on a user-friendly, dark-mode dashboard. This document specifies the technical requirements for the frontend, backend, and testing phases of the application development.
 
-**Simple React App** is a basic React application designed to demonstrate fundamental concepts of React, including components, state management, and routing. This app serves as a foundation for learning React and can be used as a template for building more complex applications.
+---
 
-## Core Features
+## Frontend Requirements
 
-- **User Authentication**: Basic signup, login, and logout functionalities.
-- **Routing**: Implementation of client-side routing using React Router.
-- **State Management**: Use of React Context for simple state management across components.
-- **API Integration**: Fetching and displaying data from a public API.
-- **Component Design**: Modular component architecture with reusable components.
-- **Styling**: Basic styling using CSS Modules or styled-components.
-- **Testing**: Integration of Jest and React Testing Library for unit and snapshot testing.
+### User Interface (UI)
+- **Dark Mode Dashboard**
+  - The dashboard must be fully responsive, supporting both desktop and mobile devices.
+  - Implement a clean and minimalist design, focusing on readability and ease of navigation.
+  - Use a dark color scheme for all elements including backgrounds, text, and interactive elements.
 
-## Technical Requirements
+### Technologies
+- **HTML5 & CSS3**
+  - Utilize HTML5 for structure and CSS3 for styling.
+  - Implement CSS frameworks like Bootstrap or Tailwind CSS to ensure a responsive design.
+  - Ensure accessibility with appropriate ARIA roles and screen reader compatibility.
 
-- **Operating System**: Windows, macOS, Linux
-- **Software**: Node.js v14.x or higher, npm v6.x or higher
-- **Frameworks**: React.js v17.x
-- **Development Tools**: Visual Studio Code, Git
-- **Build Tool**: Create React App
+- **JavaScript Framework**
+  - Use React.js or Vue.js for building interactive and dynamic UI components.
+  - Implement state management with React Context API or Vuex for Vue.js.
 
-## Dependencies
+- **Third-party Libraries**
+  - Use a state management library if needed (e.g., Redux for React).
+  - Consider using ReactQuery or Apollo Client for handling API requests and state synchronization.
 
-- **React**: v17.x
-- **React DOM**: v17.x
-- **React Router DOM**: v5.x
-- **Axios**: v0.21.x
-- **Jest**: v26.x
-- **React Testing Library**: v11.x
-- **Styled Components**: v5.x (optional for styling)
+### Features
+- **Dashboard Display**
+  - Display current Bitcoin and Ethereum price in a prominent and easy-to-read format.
+  - Include a refresh button to fetch the latest prices.
+  
+- **Chart Integration (Optional)**
+  - Integrate a chart library (e.g., Chart.js, Highcharts) to display price trends over time.
+  - Provide options to zoom and pan the chart for better visualization.
 
-## Installation & Setup
+- **User Settings**
+  - Allow users to customize refresh intervals (e.g., 1 minute, 5 minutes, 10 minutes).
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/yourusername/simple-react-app.git
-   ```
-2. **Navigate to the Project Directory**:
-   ```bash
-   cd simple-react-app
-   ```
-3. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-4. **Start the Development Server**:
-   ```bash
-   npm start
-   ```
-5. **Build for Production**:
-   ```bash
-   npm build
-   ```
+---
 
-## Architecture
+## Backend Requirements
 
-### Components
-- **App**: Root component that sets up routing.
-- **Home**: Landing page component.
-- **Login**: User login component.
-- **Signup**: User signup component.
-- **Dashboard**: Protected route accessible only after login.
-- **API Data**: Component to fetch and display data from a public API.
+### API Design
+- **RESTful API**
+  - Design a RESTful API to handle requests from the frontend.
+  - Use verbs like GET for fetching prices.
 
-### State Management
-- Use of `useContext` and `useState` hooks for managing authentication and other user-related states.
+- **Endpoints**
+  - `/api/prices` - Fetches real-time prices for Bitcoin and Ethereum.
 
-### Routing
-- Utilization of `react-router-dom` for defining routes and handling navigation.
-- Protected routes to restrict access based on user authentication status.
+### Data Fetching
+- **CoinGecko API**
+  - Use the CoinGecko API for fetching cryptocurrency prices (https://www.coingecko.com/api).
+  - Implement retries with exponential backoff for failed requests.
 
-## Styling
+- **Caching Strategy**
+  - Implement caching mechanisms (e.g., Redis) to reduce API call frequency and improve performance.
+  - Cache prices for a configurable interval (e.g., 1 minute) unless refresh button is clicked.
 
-- **Styling Method**: CSS Modules or styled-components.
-- **Style Guidelines**: Follow BEM (Block Element Modifier) naming convention for CSS classes.
+### Technologies
+- **Node.js**
+  - Use Node.js with Express.js framework to build the backend server.
+  
+- **Database**
+  - Use MongoDB or PostgreSQL for storing API request logs and other data if necessary.
 
-## Testing
+- **Authentication (Optional)**
+  - Implement basic authentication or API keys if the API needs to be protected.
 
-- **Unit Testing**: Write tests for each component using Jest and React Testing Library.
-- **Snapshot Testing**: Capture component snapshots for visual verification.
+### Features
+- **Rate Limiting**
+  - Implement rate limiting to prevent abuse of the API.
 
-## Deployment
+- **Logging**
+  - Log API requests and errors for monitoring and debugging.
 
-- **Hosting**: Consider options like Vercel, Netlify, or GitHub Pages for deploying the React app.
-- **Environment Variables**: Configure environment variables for API keys and other sensitive information.
+- **Environment Variables**
+  - Use environment variables to manage API keys and other configuration settings.
 
-## Documentation
+---
 
-- **README.md**: Detailed setup instructions, project structure, and usage guidelines.
-- **Component Documentation**: Inline comments and JSDoc for easier understanding and maintenance.
+## Testing Requirements
 
-## Maintenance
+### Frontend Testing
+- **Unit Testing**
+  - Use Jest or Testing Library for unit testing JavaScript components.
+  - Test UI components, state management, and API requests.
 
-- **Version Control**: Regular commits and branching strategy to manage different versions of the app.
-- **Dependency Updates**: Keep dependencies up-to-date to leverage new features and security patches.
-- **Continuous Integration/Continuous Deployment (CI/CD)**: Setup basic CI/CD pipelines for automated testing and deployment.
+- **Integration Testing**
+  - Use Cypress or Selenium for end-to-end testing.
+  - Test the entire application flow, including fetching and displaying prices.
 
-This tech specification serves as a comprehensive guide for developing, testing, and maintaining a simple React application that covers essential React features and best practices.
+### Backend Testing
+- **Unit Testing**
+  - Use Jest or Mocha for server-side unit tests.
+  - Test API endpoints, database interactions, and caching logic.
+
+- **Integration Testing**
+  - Use Supertest for API integration tests.
+  - Test interactions between the frontend and backend.
+
+### Security Testing
+- **Penetration Testing**
+  - Perform security audits to identify potential vulnerabilities in the application.
+  - Focus on areas like input validation, API endpoints, and logging.
+
+### Compliance Testing (Optional)
+- **Accessibility Testing**
+  - Ensure the application meets accessibility standards like WCAG 2.1.
+
+### Tools
+- **Jest**
+- **React Testing Library**
+- **Cypress**
+- **Mocha**
+- **Chai**
+- **Supertest**
+- **OWASP ZAP**
+
+---
+
+## Conclusion
+This technical specification outlines the detailed requirements for developing a cryptocurrency price tracker with a dark-mode dashboard. By following these guidelines, the development team can ensure the application is robust, user-friendly, and meets the necessary technical standards.
 ```
