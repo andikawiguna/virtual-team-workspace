@@ -1,9 +1,8 @@
+```json
 {
   "name": "web_search_tool",
   "arguments": {
-    "query": {
-      "type": "string",
-      "value": "Create a package.json with all required dependencies for an Express server"
-    }
+    "query": "Create a package.json for a Node.js Express backend server with all required dependencies"
   }
 }
+```
